@@ -1,0 +1,2208 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>基于多波长连续 PPG、心率解算与 LLM 的可视化交互智能问诊系统</title>
+  <meta
+    name="description"
+    content="基于四通道 PPG 采集、稳健心率解算、结构化问诊、可穿戴建模与板级设计的一体化科研原型系统展示页。"
+  />
+  <link rel="stylesheet" href="styles.css?v=20260419-homeecg1" />
+</head>
+<body>
+  <script>
+    document.body.classList.add("has-intro");
+  </script>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="page-orb page-orb--amber" aria-hidden="true"></div>
+  <div class="page-orb page-orb--red" aria-hidden="true"></div>
+
+  <header class="site-header header-dark" id="siteHeader">
+    <a class="brand" href="#hero" aria-label="回到页面顶部">
+      <span class="brand__mark">PPG<span>LLM</span></span>
+      <span class="brand__meta">
+        <strong>系统展示</strong>
+        <small>基于多波长连续 PPG、心率解算与 LLM 的可视化交互智能问诊系统</small>
+      </span>
+    </a>
+
+    <button
+      class="nav-toggle"
+      id="navToggle"
+      type="button"
+      aria-label="打开导航菜单"
+      aria-expanded="false"
+      aria-controls="mobileNavDrawer"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="site-nav" aria-label="主导航">
+      <a class="nav-link" href="#system" data-nav-link>工作站系统</a>
+      <a class="nav-link" href="#algorithm" data-nav-link>算法设计</a>
+      <a class="nav-link" href="#prompts" data-nav-link>提示词设计</a>
+      <a class="nav-link" href="#samples" data-nav-link>样本设计</a>
+      <a class="nav-link" href="#hardware" data-nav-link>硬件底座</a>
+      <a class="nav-link" href="#wearable" data-nav-link>可穿戴方向</a>
+      <a class="nav-link" href="#schematics" data-nav-link>原理图设计</a>
+      <a class="nav-link" href="#pcb" data-nav-link>PCB 设计</a>
+      <a class="nav-link" href="#deployment" data-nav-link>工程部署</a>
+      <a class="nav-link" href="#team" data-nav-link>团队分工</a>
+      <a class="nav-link nav-link--cta" href="#conclusion" data-nav-link>总结收束</a>
+    </nav>
+
+    <div class="nav-drawer" id="mobileNavDrawer" hidden>
+      <div class="nav-drawer__panel">
+        <div class="nav-drawer__head">
+          <div>
+            <span class="panel-eyebrow panel-eyebrow--light">完整导航</span>
+            <h2>科研展示页目录</h2>
+          </div>
+          <button class="nav-drawer__close" id="navDrawerClose" type="button" aria-label="关闭导航菜单">×</button>
+        </div>
+
+        <div class="nav-drawer__links">
+          <a class="nav-drawer__link" href="#system" data-nav-link>工作站系统</a>
+          <a class="nav-drawer__link" href="#algorithm" data-nav-link>算法设计</a>
+          <a class="nav-drawer__link" href="#prompts" data-nav-link>提示词设计</a>
+          <a class="nav-drawer__link" href="#samples" data-nav-link>样本设计</a>
+          <a class="nav-drawer__link" href="#hardware" data-nav-link>硬件底座</a>
+          <a class="nav-drawer__link" href="#wearable" data-nav-link>可穿戴方向</a>
+          <a class="nav-drawer__link" href="#schematics" data-nav-link>原理图设计</a>
+          <a class="nav-drawer__link" href="#pcb" data-nav-link>PCB 设计</a>
+          <a class="nav-drawer__link" href="#deployment" data-nav-link>工程部署</a>
+          <a class="nav-drawer__link" href="#team" data-nav-link>团队分工</a>
+          <a class="nav-drawer__link nav-drawer__link--accent" href="#conclusion" data-nav-link>总结收束</a>
+        </div>
+
+        <div class="nav-drawer__meta">
+          <span>页面主题</span>
+          <p>多波长 PPG 采集、稳健心率解算、结构化问诊、可穿戴形态与板级工程证据。</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero section-progress" id="hero" data-theme="dark" aria-labelledby="heroTitle">
+      <div class="hero__backlight" aria-hidden="true"></div>
+      <div class="hero__grid">
+        <div class="hero__copy reveal reveal--hero">
+          <div class="hero__heading">
+            <span class="kicker">多波长连续 PPG / 心率解算 / 结构化问诊 / 可穿戴原型</span>
+            <h1 id="heroTitle">
+              <span class="hero-title-line">基于多波长连续 PPG、</span>
+              <span class="hero-title-line">心率解算与 LLM 的</span>
+              <span class="hero-title-line">可视化交互智能问诊系统</span>
+            </h1>
+            <p class="hero__lead">
+              系统以 STM32F103C8T6 与 MAX86916 完成四通道 AC PPG 采集，
+              将 PCA 融合、稳健心率解算、DeepSeek-v3.2 辅助问诊、导出交付与可穿戴设计集成为一套完整原型。
+            </p>
+          </div>
+
+          <div class="hero__actions">
+            <a class="hero__link" href="#system">进入工作站</a>
+            <a class="hero__link" href="#wearable">查看可穿戴方向</a>
+          </div>
+
+          <div class="hero__chips" aria-label="技术摘要">
+            <span class="hero-chip">四通道多波长 PPG 输入</span>
+            <span class="hero-chip">PCA 融合 + 稳健 BPM</span>
+            <span class="hero-chip">DeepSeek-v3.2 辅助问诊</span>
+            <span class="hero-chip">结构建模 / 原理图 / PCB </span>
+          </div>
+
+          <div class="hero__technical">
+            <article class="evidence-card evidence-card--dark">
+              <span>信号输入</span>
+              <strong>STM32F103C8T6 + MAX86916 四通道采集</strong>
+            </article>
+            <article class="evidence-card evidence-card--dark">
+              <span>分析链路</span>
+              <strong>标准化、PCA 融合、频域评分、自相关与连续跟踪</strong>
+            </article>
+            <article class="evidence-card evidence-card--dark">
+              <span>系统输出</span>
+              <strong>工作站界面、问诊摘要、病例导出、结构建模与板级工件</strong>
+            </article>
+          </div>
+        </div>
+
+        <div class="hero__visual reveal reveal--hero" data-delay="0.08">
+          <div class="hero__product">
+            <figure class="hero__product-media">
+              <button
+                class="media-trigger hero__product-trigger"
+                type="button"
+                aria-label="放大查看腕表式可穿戴产品效果图"
+                data-lightbox-src="./assets/图片4.png?v=20260419-hd2"
+                data-lightbox-alt="上色后的腕表式可穿戴产品效果图"
+                data-lightbox-title="腕表式产品化方向"
+                data-lightbox-description="可穿戴建模最终效果图，对应腕表式产品形态的整体装配结果。"
+              >
+                <img class="hero__product-image" src="./assets/图片4.png?v=20260419-hd2" alt="上色后的腕表式可穿戴产品效果图" />
+              </button>
+            </figure>
+
+            <div class="hero__product-copy">
+              <div class="hero__product-heading">
+                <span class="hero__product-label">产品方向</span>
+                <h2 class="hero__product-title">腕表式可穿戴原型</h2>
+              </div>
+
+              <div class="hero__product-block">
+                <span class="hero__product-kicker">结构</span>
+                <p>表壳、表带、表背采集窗口、内部腔体与前端屏显入口已经形成统一的整机表达</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="asset-cloud-section intro-home section-progress"
+      id="asset-cloud"
+      data-theme="light"
+      aria-labelledby="assetCloudTitle"
+      data-intro-home
+      tabindex="0"
+      role="button"
+      aria-label="张伟麟小组启动首页，点击任意区域进入完整汇报内容"
+    >
+      <div class="intro-home__ecg" aria-hidden="true">
+        <svg class="intro-home__ecg-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
+          <path
+            class="intro-home__ecg-path intro-home__ecg-path--glow"
+            pathLength="100"
+            d="M -40 564 L 104 564 L 138 564 L 160 528 L 178 590 L 198 414 L 224 690 L 254 564 L 414 564 L 448 564 L 470 530 L 488 598 L 510 416 L 536 690 L 566 564 L 840 564 L 872 564 L 894 530 L 912 598 L 934 416 L 960 690 L 990 564 L 1230 564 L 1262 564 L 1284 528 L 1302 590 L 1322 414 L 1348 690 L 1378 564 L 1640 564"
+          />
+          <path
+            class="intro-home__ecg-path intro-home__ecg-path--track"
+            pathLength="100"
+            d="M -40 564 L 104 564 L 138 564 L 160 528 L 178 590 L 198 414 L 224 690 L 254 564 L 414 564 L 448 564 L 470 530 L 488 598 L 510 416 L 536 690 L 566 564 L 840 564 L 872 564 L 894 530 L 912 598 L 934 416 L 960 690 L 990 564 L 1230 564 L 1262 564 L 1284 528 L 1302 590 L 1322 414 L 1348 690 L 1378 564 L 1640 564"
+          />
+          <path
+            class="intro-home__ecg-path intro-home__ecg-path--pulse"
+            pathLength="100"
+            d="M -40 564 L 104 564 L 138 564 L 160 528 L 178 590 L 198 414 L 224 690 L 254 564 L 414 564 L 448 564 L 470 530 L 488 598 L 510 416 L 536 690 L 566 564 L 840 564 L 872 564 L 894 530 L 912 598 L 934 416 L 960 690 L 990 564 L 1230 564 L 1262 564 L 1284 528 L 1302 590 L 1322 414 L 1348 690 L 1378 564 L 1640 564"
+          />
+        </svg>
+      </div>
+      <div class="asset-cloud__stage" id="assetCardsStage">
+        <div class="asset-cloud__copy reveal reveal--story">
+          <span class="asset-cloud__kicker asset-cloud__kicker--intro">基于多波长连续 PPG、<br />心率解算与 LLM 的可视化交互智能问诊系统</span>
+          <h2 id="assetCloudTitle">张伟麟小组</h2>
+          <p>
+            医学仪器原理与设计课程设计
+          </p>
+        </div>
+
+        <figure
+          class="asset-card asset-card--landscape asset-card--warm"
+          style="--x: 16%; --y: 25%; --w: 220px; --r: 9deg; --dur: 7.4s; --dx: 22px; --dy: 18px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看工作站主界面"
+              data-lightbox-src="./assets/a.png"
+              data-lightbox-alt="工作站主界面截图"
+              data-lightbox-title="工作站主界面"
+              data-lightbox-description="采样设置、波形、问诊摘要和导出动作被集中组织在同一张工作站界面中。"
+            >
+              <img src="./assets/a.png" alt="工作站主界面截图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>工作站主界面</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--portrait asset-card--paper"
+          style="--x: 37%; --y: 31%; --w: 80px; --r: -3deg; --dur: 6.8s; --dx: -18px; --dy: 28px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看 STM32 主控板"
+              data-lightbox-src="./assets/STM32F103C8T6.png?v=20260419-hd2"
+              data-lightbox-alt="STM32F103C8T6 最小系统板"
+              data-lightbox-title="STM32 主控板"
+              data-lightbox-description="工作站硬件链路中的主控板实体，负责多路采样数据的接收与基础处理。"
+            >
+              <img src="./assets/STM32F103C8T6.png?v=20260419-hd2" alt="STM32F103C8T6 最小系统板" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>STM32 主控板</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--portrait asset-card--gold"
+          style="--x: 50%; --y: 22%; --w: 150px; --r: 0deg; --dur: 8.3s; --dx: 15px; --dy: -22px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看腕表式原型"
+              data-lightbox-src="./assets/图片4.png?v=20260419-hd2"
+              data-lightbox-alt="腕表式可穿戴原型效果图"
+              data-lightbox-title="腕表式原型"
+              data-lightbox-description="可穿戴方向的结构收束结果，体现了表壳、表带与采集窗口的统一表达。"
+            >
+              <img src="./assets/图片4.png?v=20260419-hd2" alt="腕表式可穿戴原型效果图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>腕表式原型</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--landscape asset-card--dark"
+          style="--x: 82%; --y: 25%; --w: 260px; --r: -12deg; --dur: 7.2s; --dx: -22px; --dy: 16px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看核心控制板布局"
+              data-lightbox-src="./assets/PCB_PCB1_2026-04-18.png"
+              data-lightbox-alt="核心控制板布局图"
+              data-lightbox-title="核心控制板布局"
+              data-lightbox-description="采用 PCB 设计中的板型一布线图，集中展示核心控制板的走线与器件布局。"
+            >
+              <img src="./assets/PCB_PCB1_2026-04-18.png" alt="核心控制板布局图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>核心控制板布局</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--landscape asset-card--ink"
+          style="--x: 10%; --y: 60%; --w: 150px; --r: -2deg; --dur: 7s; --dx: 26px; --dy: -16px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看 MAX86916 传感器"
+              data-lightbox-src="./assets/MAX86916.png?v=20260419-hd2"
+              data-lightbox-alt="MAX86916 光学传感器图"
+              data-lightbox-title="MAX86916 传感器"
+              data-lightbox-description="多波长 PPG 输入链路中的关键传感器器件，用于完成光学信号采集。"
+            >
+              <img src="./assets/MAX86916.png?v=20260419-hd2" alt="MAX86916 光学传感器图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>MAX86916 传感器</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--landscape asset-card--linen"
+          style="--x: 27%; --y: 77%; --w: 210px; --r: 12deg; --dur: 8.4s; --dx: -18px; --dy: 14px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看内部腔体分区"
+              data-lightbox-src="./assets/图片6.png?v=20260419-hd2"
+              data-lightbox-alt="内部腔体分区图"
+              data-lightbox-title="内部腔体分区"
+              data-lightbox-description="可穿戴结构设计中的内部布局证据，用来说明器件安装与空间关系。"
+            >
+              <img src="./assets/图片6.png?v=20260419-hd2" alt="内部腔体分区图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>内部腔体分区</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--landscape asset-card--mist"
+          style="--x: 51%; --y: 75%; --w: 150px; --r: 0deg; --dur: 6.7s; --dx: 14px; --dy: 18px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看核心控制原理图"
+              data-lightbox-src="./assets/SCH_core_1-CORE_2026-04-18.png"
+              data-lightbox-alt="核心控制原理图"
+              data-lightbox-title="核心控制原理图"
+              data-lightbox-description="主控、电源与接口关系被明确绘制为可检视的工程原理图工件。"
+            >
+              <img src="./assets/SCH_core_1-CORE_2026-04-18.png" alt="核心控制原理图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>核心控制原理图</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--portrait asset-card--rust"
+          style="--x: 67%; --y: 78%; --w: 86px; --r: 7deg; --dur: 7.3s; --dx: -12px; --dy: -12px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看 MIKROE-4724 载板"
+              data-lightbox-src="./assets/MIKROE-4724.png?v=20260419-hd2"
+              data-lightbox-alt="MIKROE-4724 载板正面图"
+              data-lightbox-title="MIKROE-4724 载板"
+              data-lightbox-description="MAX86916 所在的载板硬件实物，是传感器输入链路中的关键承接部件。"
+            >
+              <img src="./assets/MIKROE-4724.png?v=20260419-hd2" alt="MIKROE-4724 载板正面图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>MIKROE-4724 载板</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--landscape asset-card--warm"
+          style="--x: 78%; --y: 80%; --w: 170px; --r: 11deg; --dur: 7.6s; --dx: 19px; --dy: -21px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看板型二布线"
+              data-lightbox-src="./assets/PCB_PCB4_2026-04-18.png"
+              data-lightbox-alt="板型二布线视图"
+              data-lightbox-title="板型二布线"
+              data-lightbox-description="板级实现结果中的关键布线视图，体现模块连接与空间分配。"
+            >
+              <img src="./assets/PCB_PCB4_2026-04-18.png" alt="板型二布线视图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>板型二布线</figcaption>
+          </div>
+        </figure>
+
+        <figure
+          class="asset-card asset-card--square asset-card--aqua"
+          style="--x: 88%; --y: 59%; --w: 150px; --r: 0deg; --dur: 7.9s; --dx: -24px; --dy: -20px;"
+        >
+          <div class="asset-card__float">
+            <button
+              class="asset-card__surface media-trigger"
+              type="button"
+              aria-label="放大查看板型一 3D 视角"
+              data-lightbox-src="./assets/3D_PCB1_2026-04-18.png"
+              data-lightbox-alt="板型一 3D 视角图"
+              data-lightbox-title="板型一 3D"
+              data-lightbox-description="PCB 在三维视角下的装配效果，用于辅助理解板型与结构空间关系。"
+            >
+              <img src="./assets/3D_PCB1_2026-04-18.png" alt="板型一 3D 视角图" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>板型一 3D</figcaption>
+          </div>
+        </figure>
+      </div>
+      <div class="intro-home__hint" aria-hidden="true">
+        <span>点击任意区域进入完整汇报</span>
+      </div>
+    </section>
+
+    <div class="system-samples-band">
+    <section class="stage section-progress" id="system" data-theme="light" aria-labelledby="systemTitle">
+      <div class="section-head reveal reveal--technical">
+        <span class="kicker kicker--dark">工作站系统</span>
+        <h2 class="display display--mid" id="systemTitle">工作站系统展示</h2>
+        <p>
+          实时计算并显示心率、高级节律特征、置信度与信号质量等指标；支持 CSV 导入直接问诊与串口实时 PPG 采集分析；可补充患者姓名、年龄、主诉、既往史等结构化信息；提供报告导出、信号数据保存及大模型交互式追问
+        </p>
+      </div>
+
+      <div class="stage__shell reveal reveal--technical" data-delay="0.05" id="stageShell">
+        <div class="stage__console">
+          <div class="stage__viewport">
+            <article
+              class="stage-panel is-active"
+              id="stage-panel-workstation"
+              role="tabpanel"
+              aria-labelledby="stage-tab-workstation"
+              data-stage-panel="workstation"
+              tabindex="0"
+            >
+              <button
+                class="media-trigger stage-panel__media"
+                type="button"
+                aria-label="放大查看 PPG LLM 工作站主界面截图"
+                data-lightbox-src="./assets/a.png"
+                data-lightbox-alt="PPG LLM 工作站主界面截图"
+                data-lightbox-title="工作站主界面"
+                data-lightbox-description="主界面整合采样设置、患者信息、五行波形、问诊摘要与导出操作。"
+              >
+                <img src="./assets/a.png" alt="PPG LLM 工作站主界面截图" loading="lazy" decoding="async" />
+              </button>
+            </article>
+
+            <article
+              class="stage-panel"
+              id="stage-panel-analysis"
+              role="tabpanel"
+              aria-labelledby="stage-tab-analysis"
+              data-stage-panel="analysis"
+              tabindex="-1"
+              hidden
+            >
+              <button
+                class="media-trigger stage-panel__media"
+                type="button"
+                aria-label="放大查看节律分析界面截图"
+                data-lightbox-src="./assets/b.png"
+                data-lightbox-alt="PPG LLM 工作站节律分析界面截图"
+                data-lightbox-title="高级节律特征视图"
+                data-lightbox-description="节律分析页包含 RR 统计、规则性评分与峰频一致性等结构化指标。"
+              >
+                <img src="./assets/b.png" alt="PPG LLM 工作站节律分析界面截图" loading="lazy" decoding="async" />
+              </button>
+            </article>
+
+            <article
+              class="stage-panel"
+              id="stage-panel-prompt"
+              role="tabpanel"
+              aria-labelledby="stage-tab-prompt"
+              data-stage-panel="prompt"
+              tabindex="-1"
+              hidden
+            >
+              <div class="stage-panel__canvas stage-panel__canvas--prompt">
+                <div class="code-showcase">
+                  <article class="code-window" aria-label="wzd 提示词代码展示">
+                    <div class="code-window__toolbar">
+                      <div class="code-window__dots" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                      <strong>ppg_llm_workstation/src/ppg_llm_workstation/diagnosis.py · build_messages()</strong>
+                      <span class="code-window__label">system prompt</span>
+                    </div>
+                    <pre class="code-window__body"><code><span class="code-token code-token--name">system_prompt</span> = (
+    <span class="code-token code-token--string">"你是一名用于科研演示的医疗辅助问诊助手。"</span>
+    <span class="code-token code-token--string">"请基于有限的PPG生命体征和用户症状，给出审慎、保守、非最终诊断式的分析。"</span>
+    <span class="code-token code-token--string">"输出必须是 JSON 对象，字段为 summary, risk_level, follow_up_questions, recommendations。"</span>
+    <span class="code-token code-token--string">"risk_level 仅可取 低, 中, 高。"</span>
+    <span class="code-token code-token--string">"当 ppg_summary 中出现 rhythm_irregular 或 peak_spectral_mismatch 标记时，应优先提示节律异常风险并建议进一步心电检查。"</span>
+    <span class="code-token code-token--string">"当 signal_quality 或 confidence 偏低时，应主动降低诊断强度，明确说明当前结果仅供参考并建议重复采集。"</span>
+    <span class="code-token code-token--string">"不要将单次 PPG 结果表述为最终诊断。"</span>
+    <span class="code-token code-token--string">"不要使用 Markdown 代码块，不要添加 ```json 包裹，只返回纯 JSON。"</span>
+)</code></pre>
+                  </article>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+        <div class="stage__controls">
+          <div class="stage-tabs-wrap">
+            <div class="stage-tabs" role="tablist" aria-label="工作站视图切换" id="stageTabList">
+              <span class="stage-tabs__indicator" aria-hidden="true"></span>
+              <button
+                class="stage-tab is-active"
+                id="stage-tab-workstation"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="stage-panel-workstation"
+                tabindex="0"
+                data-stage-tab="workstation"
+              >
+                <span class="stage-tab__dot"></span>
+                <span>主界面</span>
+              </button>
+              <button
+                class="stage-tab"
+                id="stage-tab-analysis"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="stage-panel-analysis"
+                tabindex="-1"
+                data-stage-tab="analysis"
+              >
+                <span class="stage-tab__dot"></span>
+                <span>节律分析</span>
+              </button>
+              <button
+                class="stage-tab"
+                id="stage-tab-prompt"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="stage-panel-prompt"
+                tabindex="-1"
+                data-stage-tab="prompt"
+              >
+                <span class="stage-tab__dot"></span>
+                <span>问诊提示词</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <section class="algorithm section-progress" id="algorithm" data-theme="light" aria-labelledby="algorithmTitle">
+      <div class="section-head section-head--dark reveal reveal--technical">
+        <span class="kicker kicker--dark">算法设计</span>
+        <h2 class="display display--mid" id="algorithmTitle">信号处理与心率解算算法链路</h2>
+        <p>四通道 PPG 输入 → 有效采样率估计 → Z-score 标准化 + PCA 融合 → 0.7–3.5 Hz 带通 → 频域 / 自相关 / 峰值候选 → 融合与规则性评分 → 结构化摘要 → LLM 辅助问诊</p>
+      </div>
+
+      <div class="algorithm__panel reveal reveal--technical" id="algorithmViewer" data-delay="0.04">
+        <div class="algorithm__viewer">
+          <span class="algorithm__label">Core Logic</span>
+          <strong class="algorithm__logic-title" id="algoLogicTitle">有效采样率估计</strong>
+          <p class="algorithm__logic-desc" id="algoLogicDesc">根据相邻时间戳中值差倒数推算有效采样率，避免假设固定采样率造成 BPM 偏差。</p>
+          <code class="algorithm__code" id="algoLogicFormula">effective_fs = 1 / median(diff(timestamps))</code>
+
+          <hr class="algorithm__rule">
+
+          <span class="algorithm__label">Parameters</span>
+          <div class="algorithm__tags" id="algoParams">
+            <span class="algorithm__tag">窗口长度 = 8.0 s</span>
+            <span class="algorithm__tag">更新间隔 = 1.0 s</span>
+            <span class="algorithm__tag">通道数 = 4</span>
+          </div>
+
+          <hr class="algorithm__rule">
+
+          <p class="algorithm__footnote" id="algoFootnote">系统从 CSV 回放或串口流接收 Red、IR、Green、Blue 四通道原始 PPG 数据，缓存于 8 秒滑动窗口，每秒触发一轮完整的信号处理与心率解算流水线。每个采样帧由 ChannelFrame 封装，包含 4 通道值和时间戳。</p>
+        </div>
+
+        <div class="algorithm__sidebar">
+          <div class="algorithm__stage-info">
+            <h3 class="algorithm__title" id="algoStageTitle">输入与时间基校准</h3>
+            <p class="algorithm__desc" id="algoStageDesc">统一 CSV/串口输入与 8 秒滑动窗口，为后续快速傅里叶变换(FFT)、延迟量(lag) 和 RR间期(RR) 换算提供稳定时间基。</p>
+          </div>
+
+          <nav class="algorithm__nav" role="tablist" aria-label="算法阶段选择">
+            <button class="algorithm__stage is-active" type="button" role="tab" aria-selected="true" tabindex="0" data-algo-stage="input">
+              <span class="algorithm__stage-num">01</span>
+              <span class="algorithm__stage-name">输入与时基</span>
+            </button>
+            <button class="algorithm__stage" type="button" role="tab" aria-selected="false" tabindex="-1" data-algo-stage="pca">
+              <span class="algorithm__stage-num">02</span>
+              <span class="algorithm__stage-name">PCA 融合</span>
+            </button>
+            <button class="algorithm__stage" type="button" role="tab" aria-selected="false" tabindex="-1" data-algo-stage="bandpass">
+              <span class="algorithm__stage-num">03</span>
+              <span class="algorithm__stage-name">带通滤波</span>
+            </button>
+            <button class="algorithm__stage" type="button" role="tab" aria-selected="false" tabindex="-1" data-algo-stage="tripath">
+              <span class="algorithm__stage-num">04</span>
+              <span class="algorithm__stage-name">三路候选</span>
+            </button>
+            <button class="algorithm__stage" type="button" role="tab" aria-selected="false" tabindex="-1" data-algo-stage="fusion">
+              <span class="algorithm__stage-num">05</span>
+              <span class="algorithm__stage-name">融合判决</span>
+            </button>
+            <button class="algorithm__stage" type="button" role="tab" aria-selected="false" tabindex="-1" data-algo-stage="llm">
+              <span class="algorithm__stage-num">06</span>
+              <span class="algorithm__stage-name">LLM 摘要</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <section class="prompts section-progress" id="prompts" data-theme="light" aria-labelledby="promptsTitle">
+      <div class="section-head section-head--dark reveal reveal--technical">
+        <span class="kicker kicker--dark">提示词设计</span>
+        <h2 class="display display--mid" id="promptsTitle">提示词工程：从数字信号到医学洞察</h2>
+        <p>通过结构化数据输入与医学伦理约束，实现严谨的临床辅助逻辑</p>
+      </div>
+
+      <div class="prompts__overview reveal reveal--technical" data-delay="0.04" aria-label="提示词流程概览">
+        <span class="prompts__overview-label">提示词流水线</span>
+        <div class="prompts__overview-track">
+          <span>build_ppg_summary_payload()</span>
+          <span>build_messages()</span>
+          <span>build_follow_up_messages()</span>
+          <span>DiagnosisResponse</span>
+        </div>
+      </div>
+
+      <div class="prompts__grid">
+        <article class="prompts__module prompts__module--input reveal reveal--technical" data-delay="0.08">
+          <div class="prompts__module-head">
+            <span class="prompts__eyebrow">Input Deconstruction</span>
+            <h3>输入解构</h3>
+            <p>算法输出先被压缩为稳定的 JSON 载荷，再进入首轮问诊与追问模板。</p>
+          </div>
+
+          <div class="prompts__json" aria-label="结构化输入载荷">
+            <div class="prompts__json-line">
+              <span class="prompts__json-key">"heart_rate_bpm"</span>
+              <span class="prompts__json-value" id="promptInputBpm">138</span>
+            </div>
+            <div class="prompts__json-line">
+              <span class="prompts__json-key">"rhythm_score"</span>
+              <span class="prompts__json-value" id="promptInputRhythm">0.42</span>
+            </div>
+            <div class="prompts__json-line">
+              <span class="prompts__json-key">"snr_db"</span>
+              <span class="prompts__json-value" id="promptInputSnr">14.1</span>
+            </div>
+            <div class="prompts__json-line prompts__json-line--flags">
+              <span class="prompts__json-key">"possible_flags"</span>
+              <div class="prompts__json-flags" id="promptFlags"></div>
+            </div>
+            <div class="prompts__json-line">
+              <span class="prompts__json-key">"clinical_context"</span>
+              <span class="prompts__json-value prompts__json-value--soft" id="promptInputContext">
+                心悸反复 + 慢病背景 + 夜间发作更明显
+              </span>
+            </div>
+          </div>
+
+          <p class="prompts__module-note">
+            <code>possible_flags</code> 不是装饰字段，而是提示词路由开关。它决定系统是保持基线问诊，还是主动进入更保守的医学辅助逻辑。
+          </p>
+        </article>
+
+        <article class="prompts__module prompts__module--system reveal reveal--technical" data-delay="0.12">
+          <div class="prompts__module-head prompts__module-head--system">
+            <div>
+              <span class="prompts__eyebrow">System Commands</span>
+              <h3>逻辑中枢</h3>
+              <p>状态标签驱动 Prompt 策略切换，但三条底线始终固定存在。</p>
+            </div>
+
+            <div class="prompts__states" role="tablist" aria-label="提示词状态切换">
+              <button
+                class="prompts__state-btn"
+                id="prompt-state-normal"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="promptLogicPanel"
+                tabindex="-1"
+                data-prompt-state="normal"
+              >
+                正常
+              </button>
+              <button
+                class="prompts__state-btn is-active"
+                id="prompt-state-af-risk"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="promptLogicPanel"
+                tabindex="0"
+                data-prompt-state="af-risk"
+              >
+                房颤风险
+              </button>
+              <button
+                class="prompts__state-btn"
+                id="prompt-state-low-quality"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="promptLogicPanel"
+                tabindex="-1"
+                data-prompt-state="low-quality"
+              >
+                低质量
+              </button>
+            </div>
+          </div>
+
+          <div class="prompts__window" id="promptLogicPanel" aria-live="polite">
+            <div class="prompts__window-bar">
+              <span class="prompts__window-label" id="promptStateLabel">AF RISK / 保守升级</span>
+              <span class="prompts__window-file" id="promptCommandPath">build_messages() -> build_follow_up_messages()</span>
+            </div>
+
+            <p class="prompts__window-summary" id="promptStateSummary">
+              当节律不规则且伴随慢病背景时，系统必须先提示风险，再组织追问，而不是直接给出诊断结论。
+            </p>
+
+            <div class="prompts__logic-lines">
+              <div class="prompts__logic-line">
+                <span class="prompts__logic-index">01</span>
+                <div class="prompts__logic-body">
+                  <strong>角色定位：专业助手</strong>
+                  <p id="promptRoleCopy">先总结主诉与结构化 PPG 特征，再围绕心悸持续时间、头晕胸闷和既往病史组织追问。</p>
+                </div>
+              </div>
+
+              <div class="prompts__logic-line">
+                <span class="prompts__logic-index">02</span>
+                <div class="prompts__logic-body">
+                  <strong>安全红线：不予确诊</strong>
+                  <p id="promptSafetyCopy">只输出“房颤风险 / 需进一步评估”这类辅助表达，不替代心电图或医生诊断。</p>
+                </div>
+              </div>
+
+              <div class="prompts__logic-line">
+                <span class="prompts__logic-index">03</span>
+                <div class="prompts__logic-body">
+                  <strong>异常策略：低质信号保守化</strong>
+                  <p id="promptStrategyCopy">若同时出现置信度下降或信号质量不足，优先建议复测确认，再决定是否保留异常提醒。</p>
+                </div>
+              </div>
+            </div>
+
+            <p class="prompts__window-footnote" id="promptStateLogic">
+              处理逻辑：节律不规则被视为高优先级风险线索，输出先强调异常警示，再引导做心电图与线下评估。
+            </p>
+          </div>
+        </article>
+
+        <article class="prompts__module prompts__module--output reveal reveal--technical" data-delay="0.16">
+          <div class="prompts__module-head">
+            <span class="prompts__eyebrow">Output Standards</span>
+            <h3>输出范式</h3>
+            <p><code>DiagnosisResponse</code> 将回答收束为风险等级、追问列表与行动建议，避免自由发挥。</p>
+          </div>
+
+          <div class="prompts__response">
+            <section class="prompts__response-item">
+              <span>风险等级</span>
+              <strong id="promptRiskLevel">中高风险 / 建议尽快评估</strong>
+              <p id="promptRiskReason">节律规则度显著下降，且伴随慢病背景，系统默认使用更谨慎的风险描述。</p>
+            </section>
+
+            <section class="prompts__response-item">
+              <span>追问问题</span>
+              <ul id="promptQuestions">
+                <li>是否出现头晕、黑矇、胸闷或活动耐量下降？</li>
+                <li>既往是否有高血压、糖尿病、房颤或脑卒中史？</li>
+                <li>症状持续多久，夜间或静息时是否更明显？</li>
+              </ul>
+            </section>
+
+            <section class="prompts__response-item">
+              <span>行动建议</span>
+              <ul id="promptActions">
+                <li>建议尽快完成心电图或动态心电监测。</li>
+                <li>保留发作时间、伴随症状和近期用药记录。</li>
+                <li>若胸痛、晕厥或持续胸闷明显，应尽快线下就医。</li>
+              </ul>
+            </section>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="samples section-progress" id="samples" data-theme="light" aria-labelledby="samplesTitle">
+      <div class="section-head section-head--dark reveal reveal--technical">
+        <span class="kicker kicker--dark">样本设计</span>
+        <h2 class="display display--mid" id="samplesTitle">测试样本设计与算法验证</h2>
+        <p>覆盖极端心动过缓、心动过速与不规则节律的压力测试，结果与预期相符</p>
+      </div>
+
+      <div class="samples__dashboard reveal reveal--technical" data-delay="0.05" id="samplesDashboard">
+        <aside class="samples__index" aria-label="样本索引">
+          <div class="samples__index-head">
+            <span class="samples__eyebrow">Sample Index</span>
+            <p>六组边界与异常节律样本，用于检验 BPM 提取、规则度判断与问诊策略是否保持审慎一致。</p>
+          </div>
+
+          <div class="samples__list" role="tablist" aria-label="样本切换">
+            <button
+              class="samples__option is-active"
+              id="sample-tab-brady-48"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="samplesDetailPanel"
+              tabindex="0"
+              data-sample-option="brady-48"
+            >
+              <span class="samples__option-state">01</span>
+              <span class="samples__option-copy">
+                <strong>48 BPM 窦缓</strong>
+                <small>耐力训练背景 / 轻度头晕</small>
+              </span>
+            </button>
+
+            <button
+              class="samples__option"
+              id="sample-tab-brady-54"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="samplesDetailPanel"
+              tabindex="-1"
+              data-sample-option="brady-54"
+            >
+              <span class="samples__option-state">02</span>
+              <span class="samples__option-copy">
+                <strong>54 BPM 边界低心率</strong>
+                <small>体检发现 / 内分泌背景</small>
+              </span>
+            </button>
+
+            <button
+              class="samples__option"
+              id="sample-tab-tachy-126"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="samplesDetailPanel"
+              tabindex="-1"
+              data-sample-option="tachy-126"
+            >
+              <span class="samples__option-state">03</span>
+              <span class="samples__option-copy">
+                <strong>126 BPM 应激性快节律</strong>
+                <small>焦虑 + 熬夜 / 结构正常</small>
+              </span>
+            </button>
+
+            <button
+              class="samples__option"
+              id="sample-tab-tachy-144"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="samplesDetailPanel"
+              tabindex="-1"
+              data-sample-option="tachy-144"
+            >
+              <span class="samples__option-state">04</span>
+              <span class="samples__option-copy">
+                <strong>144 BPM 发热相关快节律</strong>
+                <small>感染应激 / 活动后明显</small>
+              </span>
+            </button>
+
+            <button
+              class="samples__option"
+              id="sample-tab-tachy-156"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="samplesDetailPanel"
+              tabindex="-1"
+              data-sample-option="tachy-156"
+            >
+              <span class="samples__option-state">05</span>
+              <span class="samples__option-copy">
+                <strong>156 BPM 高危快节律</strong>
+                <small>突发胸闷出汗 / 急诊提示</small>
+              </span>
+            </button>
+
+            <button
+              class="samples__option"
+              id="sample-tab-irregular"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="samplesDetailPanel"
+              tabindex="-1"
+              data-sample-option="irregular"
+            >
+              <span class="samples__option-state">06</span>
+              <span class="samples__option-copy">
+                <strong>未知 BPM 不规则快节律</strong>
+                <small>慢病高风险 / 节律忽快忽慢</small>
+              </span>
+            </button>
+          </div>
+        </aside>
+
+        <div class="samples__detail" id="samplesDetailPanel">
+          <div class="samples__detail-toolbar">
+            <button class="samples__view-btn" id="samplesViewToggle" type="button" aria-pressed="false">
+              <span class="samples__view-btn-label" data-default="查看测试截图" data-alt="返回数据面板">查看测试截图</span>
+            </button>
+          </div>
+
+          <div class="samples__screenshot" id="samplesScreenshot" hidden>
+            <img id="samplesScreenshotImg" src="./assets/abnormal_bradycardia_48bpm_fs100.png" alt="48 BPM 窦缓样本测试截图" loading="lazy" decoding="async" />
+          </div>
+
+          <section class="samples__lens" id="samplesLensPanel" aria-live="polite">
+            <div class="samples__lens-head">
+              <div>
+                <span class="samples__eyebrow">Algorithm Lens</span>
+                <p class="samples__lens-file" id="samplesLensFile">abnormal_bradycardia_48bpm_fs100.csv</p>
+              </div>
+              <div class="samples__tokens" id="samplesTokens"></div>
+            </div>
+
+            <div class="samples__hero">
+              <div class="samples__metric samples__metric--primary">
+                <em id="samplesMetricHeadline">48 BPM 窦缓样本</em>
+                <div class="samples__metric-headline" aria-live="polite">
+                  <span id="samplesMetricHeadlineTop">48 BPM</span>
+                  <span id="samplesMetricHeadlineBottom">窦缓样本</span>
+                </div>
+                <span>心率提取</span>
+                <strong id="samplesMetricBpm">48.62</strong>
+              </div>
+
+              <div class="samples__metric-grid">
+                <article class="samples__metric">
+                  <span>置信度</span>
+                  <strong id="samplesMetricConfidence">0.981</strong>
+                </article>
+                <article class="samples__metric">
+                  <span>节律规则度</span>
+                  <strong id="samplesMetricRegularity">0.861</strong>
+                </article>
+                <article class="samples__metric">
+                  <span>信号质量</span>
+                  <strong id="samplesMetricQuality">0.984</strong>
+                </article>
+                <article class="samples__metric">
+                  <span>RR均值(ms)</span>
+                  <strong id="samplesMetricRrMean">1245.0</strong>
+                </article>
+                <article class="samples__metric">
+                  <span>RR标准差(ms)</span>
+                  <strong id="samplesMetricRrStd">31.22</strong>
+                </article>
+                <article class="samples__metric">
+                  <span>峰谱一致性</span>
+                  <strong id="samplesMetricPeakSpectral">0.994</strong>
+                </article>
+              </div>
+            </div>
+
+            <div class="samples__wave">
+              <svg viewBox="0 0 640 220" role="img" aria-labelledby="samplesWaveTitle samplesWaveDesc">
+                <title id="samplesWaveTitle">PPG stress waveform</title>
+                <desc id="samplesWaveDesc">用于展示当前样本节律频率与波幅变化的模拟波形。</desc>
+                <path class="samples__wave-grid" d="M 16 184 H 624 M 16 128 H 624 M 16 72 H 624"></path>
+                <path class="samples__wave-guide" d="M 16 184 H 624"></path>
+                <path
+                  class="samples__wave-path"
+                  id="samplesWavePath"
+                  d="M 16 176 C 34 176 42 176 50 176 C 62 176 78 138 94 104 C 100 90 106 86 114 96 C 124 110 132 148 144 156 C 156 146 166 150 178 152 C 214 154 232 176 250 176 C 266 176 282 176 298 176 C 310 176 326 140 342 108 C 350 92 356 88 364 98 C 374 112 382 150 394 158 C 406 148 416 152 428 154 C 462 156 482 176 500 176 C 516 176 530 176 544 176 C 556 176 570 142 586 110 C 594 94 600 90 608 100 C 616 112 620 162 624 176"
+                ></path>
+              </svg>
+            </div>
+
+            <div class="samples__lens-note">
+              <span>Validation Focus</span>
+              <p id="samplesValidationFocus">区分生理性低心率与需进一步评估的低速节律，观察 BPM 与规则度是否稳定。</p>
+            </div>
+          </section>
+
+          <aside class="samples__profile" id="samplesProfilePanel">
+            <span class="samples__eyebrow">病例画像</span>
+            <h3 id="samplesProfileName">李晨</h3>
+            <p class="samples__profile-meta" id="samplesProfileMeta">24 岁 / 男 / 长期耐力跑训练</p>
+
+            <div class="samples__profile-block">
+              <span>主诉</span>
+              <p id="samplesProfileComplaint">最近运动后心率偏慢，偶尔头晕。</p>
+            </div>
+
+            <div class="samples__profile-block">
+              <span>临床背景</span>
+              <p id="samplesProfileContext">近 1 周静息时常感到心跳偏慢，起身较快时会有轻微头晕，无胸痛，无明显呼吸困难。</p>
+            </div>
+
+            <div class="samples__profile-block">
+              <span>既往史</span>
+              <p id="samplesProfileHistory">长期坚持耐力跑训练，无已知心脏病史，当前用于测试生理性窦性心动过缓样本。</p>
+            </div>
+
+            <div class="samples__profile-block">
+              <span>提示词意图</span>
+              <p id="samplesProfileIntent">验证系统能否降低诊断强度，输出"继续观察 vs 建议进一步检查"的保守型追问策略。</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="hardware section-progress" id="hardware" data-theme="dark" aria-labelledby="hardwareTitle">
+      <div class="section-head reveal reveal--technical">
+        <span class="kicker kicker--dark">硬件底座</span>
+        <h2 class="display display--mid" id="hardwareTitle">硬件链路总览</h2>
+        <p>
+          MAX86916 将四通道 AC PPG 信号带入系统，MIKROE-4724 完成载板承接，STM32F103C8T6 负责调度与上送，把真实脉搏波稳定送入工作站
+        </p>
+      </div>
+
+      <div class="hardware-stage reveal reveal--technical" data-delay="0.04" aria-label="硬件悬浮舞台">
+        <svg class="hardware-stage__traces" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+          <path class="hardware-stage__trace hardware-stage__trace--sensor" d="M186 194 C248 186, 312 208, 372 252" />
+          <path class="hardware-stage__trace hardware-stage__trace--carrier" d="M436 294 C504 320, 560 330, 642 312" />
+          <path class="hardware-stage__trace hardware-stage__trace--output" d="M714 316 C790 300, 856 276, 928 244" />
+          <circle class="hardware-stage__node" cx="186" cy="194" r="4"></circle>
+          <circle class="hardware-stage__node" cx="408" cy="276" r="4"></circle>
+          <circle class="hardware-stage__node" cx="682" cy="314" r="4"></circle>
+          <circle class="hardware-stage__node" cx="928" cy="244" r="4"></circle>
+        </svg>
+
+        <figure class="hardware-stage__object hardware-stage__object--sensor">
+          <button
+            class="media-trigger hardware-stage__trigger"
+            type="button"
+            aria-label="放大查看 MAX86916 光学传感器器件图"
+            data-lightbox-src="./assets/MAX86916.png?v=20260419-hd2"
+            data-lightbox-alt="MAX86916 光学传感器器件图"
+            data-lightbox-title="MAX86916 光学传感器"
+            data-lightbox-description="四通道光学采集能力的核心来源，是系统进入真实信号世界的起点。"
+          >
+            <img src="./assets/MAX86916.png?v=20260419-hd2" alt="MAX86916 光学传感器器件图" loading="lazy" decoding="async" />
+          </button>
+          <figcaption>
+            <span>01 / 光学输入</span>
+            <strong>MAX86916</strong>
+          </figcaption>
+        </figure>
+
+        <figure class="hardware-stage__object hardware-stage__object--carrier">
+          <button
+            class="media-trigger hardware-stage__trigger"
+            type="button"
+            aria-label="放大查看 MIKROE-4724 正面"
+            data-lightbox-src="./assets/MIKROE-4724.png?v=20260419-hd2"
+            data-lightbox-alt="MIKROE-4724 心率采集载板正面"
+            data-lightbox-title="MIKROE-4724 正面"
+            data-lightbox-description="载板正面呈现光学采集模块的器件布局。"
+          >
+            <img src="./assets/MIKROE-4724.png?v=20260419-hd2" alt="MIKROE-4724 心率采集载板正面" loading="lazy" decoding="async" />
+          </button>
+          <figcaption>
+            <span>02 / 载板承接</span>
+            <strong>MIKROE-4724</strong>
+          </figcaption>
+        </figure>
+
+        <figure class="hardware-stage__object hardware-stage__object--carrier-back">
+          <button
+            class="media-trigger hardware-stage__trigger"
+            type="button"
+            aria-label="放大查看 MIKROE-4724 背面"
+            data-lightbox-src="./assets/MIKROE-4724_2.png?v=20260419-hd2"
+            data-lightbox-alt="MIKROE-4724 心率采集载板背面"
+            data-lightbox-title="MIKROE-4724 背面"
+            data-lightbox-description="载板背面呈现接口组织与走线关系。"
+          >
+            <img src="./assets/MIKROE-4724_2.png?v=20260419-hd2" alt="MIKROE-4724 心率采集载板背面" loading="lazy" decoding="async" />
+          </button>
+        </figure>
+
+        <figure class="hardware-stage__object hardware-stage__object--controller">
+          <button
+            class="media-trigger hardware-stage__trigger"
+            type="button"
+            aria-label="放大查看 STM32F103C8T6 最小系统板实物图"
+            data-lightbox-src="./assets/STM32F103C8T6.png?v=20260419-hd2"
+            data-lightbox-alt="STM32F103C8T6 最小系统板实物图"
+            data-lightbox-title="STM32F103C8T6 最小系统板"
+            data-lightbox-description="最小系统板承担采样调度和串口输出，是硬件链路的主控核心。"
+          >
+            <img src="./assets/STM32F103C8T6.png?v=20260419-hd2" alt="STM32F103C8T6 最小系统板实物图" loading="lazy" decoding="async" />
+          </button>
+          <figcaption>
+            <span>03 / 主控核心</span>
+            <strong>STM32F103C8T6</strong>
+          </figcaption>
+        </figure>
+
+        <figure class="hardware-stage__object hardware-stage__object--family">
+          <button
+            class="media-trigger hardware-stage__trigger"
+            type="button"
+            aria-label="放大查看 STM32F103 芯片家族器件图"
+            data-lightbox-src="./assets/STM32F103.png?v=20260419-hd2"
+            data-lightbox-alt="STM32F103 芯片家族器件图"
+            data-lightbox-title="STM32F103 芯片家族"
+            data-lightbox-description="补充主控方案与底层芯片器件来源之间的映射关系。"
+          >
+            <img src="./assets/STM32F103.png?v=20260419-hd2" alt="STM32F103 芯片家族器件图" loading="lazy" decoding="async" />
+          </button>
+        </figure>
+
+        <div class="hardware-stage__annotation hardware-stage__annotation--controller">
+          <span>Controller</span>
+          <p>STM32F103C8T6 负责调度、预处理与上送，把硬件底座收束为一条稳定主链路。</p>
+        </div>
+
+        <div class="hardware-stage__footer" aria-label="硬件数据流向">
+          <span>MAX86916</span>
+          <i></i>
+          <span>MIKROE-4724</span>
+          <i></i>
+          <span>STM32F103C8T6</span>
+          <i></i>
+          <span>PPG LLM Workstation</span>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="wearable section-progress" id="wearable" data-theme="light" aria-labelledby="wearableTitle">
+      <div class="section-head reveal reveal--technical">
+        <span class="kicker kicker--dark">可穿戴方向</span>
+        <h2 class="display display--mid" id="wearableTitle">腕表式产品原型建模</h2>
+        <p>从外观母体、佩戴关系到采集窗口与整机装配，可穿戴方案最终收束为腕表式产品原型</p>
+      </div>
+
+      <div class="wearable-atlas reveal reveal--story" aria-label="可穿戴结构图谱总览">
+        <article class="wearable-atlas__lead">
+          <figure class="wearable-atlas__media wearable-atlas__media--lead">
+            <button
+              class="wearable-atlas__media-button media-trigger"
+              type="button"
+              aria-label="放大查看最终腕表原型"
+              data-lightbox-src="./assets/图片4.png?v=20260419-hd2"
+              data-lightbox-alt="最终腕表原型"
+              data-lightbox-title="最终腕表原型"
+              data-lightbox-description="上色后的最终效果图将表壳、表带、背部采集窗口、内部空腔与前端屏显统一收束为接近真实产品状态的腕表式原型。"
+            >
+              <img src="./assets/图片4.png?v=20260419-hd2" alt="最终腕表原型" loading="lazy" decoding="async" />
+            </button>
+          </figure>
+          <div class="wearable-atlas__copy wearable-atlas__copy--lead">
+            <div class="wearable-atlas__meta">
+              <span class="wearable-atlas__index">04</span>
+              <span class="wearable-atlas__label">最终原型</span>
+            </div>
+            <h3>最终上色效果</h3>
+            <p>涵盖外观母体、佩戴关系、侧视轮廓、采集窗口、内部空腔和前端屏显的建模，展望未来产品样式。</p>
+            <button
+              class="wearable-atlas__link media-trigger"
+              type="button"
+              aria-label="放大查看最终腕表原型"
+              data-lightbox-src="./assets/图片4.png?v=20260419-hd2"
+              data-lightbox-alt="最终腕表原型"
+              data-lightbox-title="最终腕表原型"
+              data-lightbox-description="上色后的最终效果图将表壳、表带、背部采集窗口、内部空腔与前端屏显统一收束为接近真实产品状态的腕表式原型。"
+            >查看最终腕表原图</button>
+          </div>
+        </article>
+
+        <div class="wearable-atlas__grid" aria-label="可穿戴结构图谱分项">
+          <article class="wearable-atlas__item">
+            <figure class="wearable-atlas__media">
+              <button
+                class="wearable-atlas__media-button media-trigger"
+                type="button"
+                aria-label="放大查看外观母体"
+                data-lightbox-src="./assets/图片1.png?v=20260419-hd2"
+                data-lightbox-alt="外观母体"
+                data-lightbox-title="外观母体"
+                data-lightbox-description="表壳主体采用方形圆角设计，兼顾现代感与佩戴舒适；表盘保留可拆结构，为后续装配、维护与形态延展留下空间。"
+              >
+                <img src="./assets/图片1.png?v=20260419-hd2" alt="外观母体" loading="lazy" decoding="async" />
+              </button>
+            </figure>
+            <div class="wearable-atlas__copy">
+              <div class="wearable-atlas__meta">
+                <span class="wearable-atlas__index">01</span>
+                <span class="wearable-atlas__label">外观母体</span>
+              </div>
+              <h3>先定壳体轮廓</h3>
+              <p>方形圆角外观不是装饰，它先确定气质、边界和后续装配的约束条件，所有功能部件都将在这个轮廓之内收束。</p>
+              <button
+                class="wearable-atlas__link media-trigger"
+                type="button"
+                aria-label="放大查看外观母体"
+                data-lightbox-src="./assets/图片1.png?v=20260419-hd2"
+                data-lightbox-alt="外观母体"
+                data-lightbox-title="外观母体"
+                data-lightbox-description="表壳主体采用方形圆角设计，兼顾现代感与佩戴舒适；表盘保留可拆结构，为后续装配、维护与形态延展留下空间。"
+              >查看外观母体原图</button>
+            </div>
+          </article>
+
+          <article class="wearable-atlas__item">
+            <figure class="wearable-atlas__media">
+              <button
+                class="wearable-atlas__media-button media-trigger"
+                type="button"
+                aria-label="放大查看腕表式装配"
+                data-lightbox-src="./assets/图片2.png?v=20260419-hd2"
+                data-lightbox-alt="腕表式装配"
+                data-lightbox-title="腕表式装配"
+                data-lightbox-description="壳体、表带和腕部贴合关系在这一阶段同步建立，设备的佩戴方式、贴肤姿态与整体重心由此被纳入同一套产品结构中。"
+              >
+                <img src="./assets/图片2.png?v=20260419-hd2" alt="腕表式装配" loading="lazy" decoding="async" />
+              </button>
+            </figure>
+            <div class="wearable-atlas__copy">
+              <div class="wearable-atlas__meta">
+                <span class="wearable-atlas__index">02</span>
+                <span class="wearable-atlas__label">佩戴关系</span>
+              </div>
+              <h3>贴腕才像产品</h3>
+              <p>表带、壳体与腕部重心在这一阶段被校准，佩戴姿态、厚度感和真实使用关系一起进入整机判断。</p>
+              <button
+                class="wearable-atlas__link media-trigger"
+                type="button"
+                aria-label="放大查看腕表式装配"
+                data-lightbox-src="./assets/图片2.png?v=20260419-hd2"
+                data-lightbox-alt="腕表式装配"
+                data-lightbox-title="腕表式装配"
+                data-lightbox-description="壳体、表带和腕部贴合关系在这一阶段同步建立，设备的佩戴方式、贴肤姿态与整体重心由此被纳入同一套产品结构中。"
+              >查看佩戴关系原图</button>
+            </div>
+          </article>
+
+          <article class="wearable-atlas__item">
+            <figure class="wearable-atlas__media">
+              <button
+                class="wearable-atlas__media-button media-trigger"
+                type="button"
+                aria-label="放大查看侧视轮廓"
+                data-lightbox-src="./assets/图片3.png?v=20260419-hd2"
+                data-lightbox-alt="侧视轮廓"
+                data-lightbox-title="侧视轮廓"
+                data-lightbox-description="侧视轮廓用于控制厚度、边框与贴腕姿态，使腕表式原型在外观表达和佩戴体验之间保持平衡。"
+              >
+                <img src="./assets/图片3.png?v=20260419-hd2" alt="侧视轮廓" loading="lazy" decoding="async" />
+              </button>
+            </figure>
+            <div class="wearable-atlas__copy">
+              <div class="wearable-atlas__meta">
+                <span class="wearable-atlas__index">03</span>
+                <span class="wearable-atlas__label">侧视轮廓</span>
+              </div>
+              <h3>侧剖校准尺度</h3>
+              <p>这张图不负责制造情绪，而是把壳体厚度、边框过渡和贴腕弧线拉回到真实佩戴的工程语境里。</p>
+              <button
+                class="wearable-atlas__link media-trigger"
+                type="button"
+                aria-label="放大查看侧视轮廓"
+                data-lightbox-src="./assets/图片3.png?v=20260419-hd2"
+                data-lightbox-alt="侧视轮廓"
+                data-lightbox-title="侧视轮廓"
+                data-lightbox-description="侧视轮廓用于控制厚度、边框与贴腕姿态，使腕表式原型在外观表达和佩戴体验之间保持平衡。"
+              >查看侧视轮廓原图</button>
+            </div>
+          </article>
+
+          <article class="wearable-atlas__item">
+            <figure class="wearable-atlas__media">
+              <button
+                class="wearable-atlas__media-button media-trigger"
+                type="button"
+                aria-label="放大查看背部采集窗口"
+                data-lightbox-src="./assets/图片5.png?v=20260419-hd2"
+                data-lightbox-alt="背部采集窗口"
+                data-lightbox-title="背部采集窗口"
+                data-lightbox-description="传感器开口定位在手表背面正中偏尺侧的长方形通孔，对应手腕“关”位；开口周围加入环形围挡，装配后与皮肤形成封闭腔体，用来抑制 LED 漏光和直接反射。"
+              >
+                <img src="./assets/图片5.png?v=20260419-hd2" alt="背部采集窗口" loading="lazy" decoding="async" />
+              </button>
+            </figure>
+            <div class="wearable-atlas__copy">
+              <div class="wearable-atlas__meta">
+                <span class="wearable-atlas__index">05</span>
+                <span class="wearable-atlas__label">采集窗口</span>
+              </div>
+              <h3>信号入口在表背</h3>
+              <p>采集通孔与环形围挡一起工作，压住漏光与反射，让信号在接触皮肤的那一刻就更可信。</p>
+              <button
+                class="wearable-atlas__link media-trigger"
+                type="button"
+                aria-label="放大查看背部采集窗口"
+                data-lightbox-src="./assets/图片5.png?v=20260419-hd2"
+                data-lightbox-alt="背部采集窗口"
+                data-lightbox-title="背部采集窗口"
+                data-lightbox-description="传感器开口定位在手表背面正中偏尺侧的长方形通孔，对应手腕“关”位；开口周围加入环形围挡，装配后与皮肤形成封闭腔体，用来抑制 LED 漏光和直接反射。"
+              >查看采集窗口原图</button>
+            </div>
+          </article>
+
+          <article class="wearable-atlas__item">
+            <figure class="wearable-atlas__media">
+              <button
+                class="wearable-atlas__media-button media-trigger"
+                type="button"
+                aria-label="放大查看内部空腔分区"
+                data-lightbox-src="./assets/图片6.png?v=20260419-hd2"
+                data-lightbox-alt="内部空腔分区"
+                data-lightbox-title="内部空腔分区"
+                data-lightbox-description="内部空腔按靠近前端与靠近背部的方向组织 PCB 和电池位置，使板、电与表壳装配关系进入同一套整机结构逻辑。"
+              >
+                <img src="./assets/图片6.png?v=20260419-hd2" alt="内部空腔分区" loading="lazy" decoding="async" />
+              </button>
+            </figure>
+            <div class="wearable-atlas__copy">
+              <div class="wearable-atlas__meta">
+                <span class="wearable-atlas__index">06</span>
+                <span class="wearable-atlas__label">内部空腔</span>
+              </div>
+              <h3>内腔决定整机</h3>
+              <p>PCB 与电池的落位关系在这里被组织成可装配的整机空间，而不是零件之间彼此妥协的临时堆叠。</p>
+              <button
+                class="wearable-atlas__link media-trigger"
+                type="button"
+                aria-label="放大查看内部空腔分区"
+                data-lightbox-src="./assets/图片6.png?v=20260419-hd2"
+                data-lightbox-alt="内部空腔分区"
+                data-lightbox-title="内部空腔分区"
+                data-lightbox-description="内部空腔按靠近前端与靠近背部的方向组织 PCB 和电池位置，使板、电与表壳装配关系进入同一套整机结构逻辑。"
+              >查看内部空腔原图</button>
+            </div>
+          </article>
+
+          <article class="wearable-atlas__item">
+            <figure class="wearable-atlas__media">
+              <button
+                class="wearable-atlas__media-button media-trigger"
+                type="button"
+                aria-label="放大查看前端屏显"
+                data-lightbox-src="./assets/图片7.png?v=20260419-hd2"
+                data-lightbox-alt="前端屏显"
+                data-lightbox-title="前端屏显"
+                data-lightbox-description="前端屏幕位置定义了后续显示与交互入口，使可穿戴原型不仅具备采样能力，也具备面向用户的结果呈现与交互基础。"
+              >
+                <img src="./assets/图片7.png?v=20260419-hd2" alt="前端屏显" loading="lazy" decoding="async" />
+              </button>
+            </figure>
+            <div class="wearable-atlas__copy">
+              <div class="wearable-atlas__meta">
+                <span class="wearable-atlas__index">07</span>
+                <span class="wearable-atlas__label">前端屏显</span>
+              </div>
+              <h3>屏显补全产品感</h3>
+              <p>屏幕位置定义了交互入口与结果呈现方式，让这套原型开始具备面向用户的正面语言。</p>
+              <button
+                class="wearable-atlas__link media-trigger"
+                type="button"
+                aria-label="放大查看前端屏显"
+                data-lightbox-src="./assets/图片7.png?v=20260419-hd2"
+                data-lightbox-alt="前端屏显"
+                data-lightbox-title="前端屏显"
+                data-lightbox-description="前端屏幕位置定义了后续显示与交互入口，使可穿戴原型不仅具备采样能力，也具备面向用户的结果呈现与交互基础。"
+              >查看前端屏显原图</button>
+            </div>
+          </article>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="schematics section-progress" id="schematics" data-theme="dark" aria-labelledby="schematicsTitle">
+      <div class="section-head section-head--dark reveal reveal--technical">
+        <span class="kicker">原理图设计</span>
+        <h2 class="display display--mid" id="schematicsTitle">原理图工程文件展示</h2>
+        <p>
+          覆盖系统框图、核心控制、供电组织、处理器接口与背板连接五个部分
+        </p>
+      </div>
+
+      <div class="schematics__shell reveal reveal--technical" data-delay="0.05">
+        <div class="schematics__viewer">
+          <div class="schematics__viewer-head">
+            <div class="schematics__viewer-copy">
+              <span class="panel-eyebrow panel-eyebrow--light">检视视图</span>
+              <h3 id="schematicPreviewTitle">系统框图</h3>
+            </div>
+            <div class="schematics__viewer-tags" aria-label="当前图层信息">
+              <span class="schematics__viewer-code">当前图层</span>
+              <strong class="schematics__viewer-type" id="schematicPreviewType">系统框图</strong>
+              <span class="schematics__viewer-hint">点击主图放大检视</span>
+            </div>
+          </div>
+
+          <button
+            class="schematics__preview-button media-trigger"
+            id="schematicPreviewTrigger"
+            type="button"
+            aria-label="放大查看当前原理图"
+            data-lightbox-src="./assets/系统框图.png"
+            data-lightbox-alt="系统框图"
+            data-lightbox-title="系统框图"
+            data-lightbox-description="系统框图展示采集端、工作站与问诊接口之间的总体关系。"
+          >
+            <img
+              id="schematicPreviewImage"
+              src="./assets/系统框图.png"
+              alt="系统框图"
+              loading="lazy"
+              decoding="async"
+            />
+          </button>
+
+          <div class="schematics__viewer-meta">
+            <article class="schematics__meta-item">
+              <span>工程简述</span>
+              <strong id="schematicPreviewDescription">系统框图展示采集端、工作站与问诊接口之间的总体关系。</strong>
+            </article>
+            <article class="schematics__meta-item">
+              <span>关注方向</span>
+              <strong id="schematicPreviewFocus">模块分层、数据流向与整体架构关系</strong>
+            </article>
+            <article class="schematics__meta-item">
+              <span>工程价值</span>
+              <strong id="schematicPreviewMeaning">为整机级架构说明与后续板级设计提供总体依据</strong>
+            </article>
+          </div>
+        </div>
+
+        <aside class="schematics__rail">
+          <div class="schematics__rail-note">
+            <span class="panel-eyebrow panel-eyebrow--light">时间线索引</span>
+            <p>支持键盘方向键切换。当前选中项会同步更新主查看器、标题与工程说明。</p>
+          </div>
+
+          <div class="schematics__thumbs" aria-label="原理图缩略图组">
+            <button
+              class="schematic-thumb is-active"
+              type="button"
+              aria-pressed="true"
+              tabindex="0"
+              data-schematic-target="./assets/系统框图.png"
+              data-schematic-alt="系统框图"
+              data-schematic-title="系统框图"
+              data-schematic-type="系统框图"
+              data-schematic-description="系统框图展示采集端、工作站与问诊接口之间的总体关系。"
+              data-schematic-focus="模块分层、数据流向与整体架构关系"
+              data-schematic-meaning="为整机级架构说明与后续板级设计提供总体依据"
+            >
+              <img src="./assets/系统框图.png" alt="" loading="lazy" decoding="async" />
+              <span class="schematic-thumb__copy">
+                <strong>系统框图</strong>
+                <small>整机架构总览</small>
+              </span>
+            </button>
+
+            <button
+              class="schematic-thumb"
+              type="button"
+              aria-pressed="false"
+              tabindex="-1"
+              data-schematic-target="./assets/SCH_core_1-CORE_2026-04-18.png"
+              data-schematic-alt="核心控制板原理图"
+              data-schematic-title="核心控制板原理图"
+              data-schematic-type="核心控制"
+              data-schematic-description="核心控制板呈现主板关键连接关系。"
+              data-schematic-focus="主控、接口与关键连接关系"
+              data-schematic-meaning="为板级实现建立核心电气依据"
+            >
+              <img src="./assets/SCH_core_1-CORE_2026-04-18.png" alt="" loading="lazy" decoding="async" />
+              <span class="schematic-thumb__copy">
+                <strong>核心控制</strong>
+                <small>主板关键连接</small>
+              </span>
+            </button>
+
+            <button
+              class="schematic-thumb"
+              type="button"
+              aria-pressed="false"
+              tabindex="-1"
+              data-schematic-target="./assets/SCH_core_2-POWER_2026-04-18.png"
+              data-schematic-alt="供电组织原理图"
+              data-schematic-title="供电组织原理图"
+              data-schematic-type="供电组织"
+              data-schematic-description="供电组织呈现电源分配与稳压关系。"
+              data-schematic-focus="三路供电、稳压与功耗边界"
+              data-schematic-meaning="为系统稳定运行提供供电组织依据"
+            >
+              <img src="./assets/SCH_core_2-POWER_2026-04-18.png" alt="" loading="lazy" decoding="async" />
+              <span class="schematic-thumb__copy">
+                <strong>供电组织</strong>
+                <small>电源分配与稳压</small>
+              </span>
+            </button>
+
+            <button
+              class="schematic-thumb"
+              type="button"
+              aria-pressed="false"
+              tabindex="-1"
+              data-schematic-target="./assets/SCH_core_3-MPU_2026-04-18.png"
+              data-schematic-alt="处理器接口原理图"
+              data-schematic-title="处理器接口原理图"
+              data-schematic-type="处理器接口"
+              data-schematic-description="处理器接口呈现主控连接和外围接口组织。"
+              data-schematic-focus="处理器外设、接口映射与连接组织"
+              data-schematic-meaning="定义主控与外围模块的接口契约"
+            >
+              <img src="./assets/SCH_core_3-MPU_2026-04-18.png" alt="" loading="lazy" decoding="async" />
+              <span class="schematic-thumb__copy">
+                <strong>处理器接口</strong>
+                <small>主控与外围连接</small>
+              </span>
+            </button>
+
+            <button
+              class="schematic-thumb"
+              type="button"
+              aria-pressed="false"
+              tabindex="-1"
+              data-schematic-target="./assets/SCH_back_1-P1_2026-04-18.png"
+              data-schematic-alt="背板连接原理图"
+              data-schematic-title="背板连接原理图"
+              data-schematic-type="背板连接"
+              data-schematic-description="背板连接补全板间接口与整机连接关系。"
+              data-schematic-focus="板间连接、背板组织与整机拼接关系"
+              data-schematic-meaning="补足整机级连接逻辑与扩展方向"
+            >
+              <img src="./assets/SCH_back_1-P1_2026-04-18.png" alt="" loading="lazy" decoding="async" />
+              <span class="schematic-thumb__copy">
+                <strong>背板连接</strong>
+                <small>板间接口补全</small>
+              </span>
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="pcb section-progress" id="pcb" data-theme="dark" aria-labelledby="pcbTitle">
+      <div class="section-head section-head--dark reveal reveal--technical">
+        <span class="kicker">PCB 设计</span>
+        <h2 class="display display--mid" id="pcbTitle">PCB工程文件展示</h2>
+        <p>
+          从 3D 装配、双板型布线到外形边界，以检视台方式查看当前板级实现
+        </p>
+      </div>
+
+      <div class="pcb__toolbar reveal reveal--data" data-delay="0.04">
+        <div class="pcb__filters" role="group" aria-label="PCB 分类筛选">
+          <button class="pcb-filter is-active" type="button" data-pcb-filter="all" aria-pressed="true">全部</button>
+          <button class="pcb-filter" type="button" data-pcb-filter="3d" aria-pressed="false">3D 视角</button>
+          <button class="pcb-filter" type="button" data-pcb-filter="pcb" aria-pressed="false">布线视图</button>
+          <button class="pcb-filter" type="button" data-pcb-filter="outline" aria-pressed="false">外形边界</button>
+        </div>
+
+        <article class="pcb__status">
+          <span>Inspection Scope</span>
+          <strong id="pcbFilterTitle">全部工程视图</strong>
+          <p id="pcbFilterDescription">从 3D 装配、走线布局到外形轮廓，统一查看当前板级实现的整体状态。</p>
+        </article>
+      </div>
+
+      <div class="pcb__grid pcb__grid--all reveal reveal--technical" data-delay="0.08">
+        <article class="pcb-card pcb-card--hero" data-pcb-group="3d">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型一 3D 视角"
+            data-lightbox-src="./assets/3D_PCB1_2026-04-18.png"
+            data-lightbox-alt="板型一 3D 视角"
+            data-lightbox-title="板型一 3D 视角"
+            data-lightbox-description="板型一呈现器件堆叠与空间关系。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/3D_PCB1_2026-04-18.png" alt="板型一 3D 视角" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">3D 装配</span>
+              <span class="pcb-card__hint">01 / PRIMARY</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型一 3D 视角</h3>
+              <p>用于观察板型一的器件堆叠与空间关系。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module" data-pcb-group="3d">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型一底层 3D 视角"
+            data-lightbox-src="./assets/3D_PCB1底层_2026-04-18.png"
+            data-lightbox-alt="板型一底层 3D 视角"
+            data-lightbox-title="板型一底层 3D 视角"
+            data-lightbox-description="用于观察板型一底层的空间与器件布局。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/3D_PCB1底层_2026-04-18.png" alt="板型一底层 3D 视角" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">3D 装配</span>
+              <span class="pcb-card__hint">02 / LOWER</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型一底层 3D</h3>
+              <p>补充观察底层空间关系与器件布局。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module" data-pcb-group="3d">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型二 3D 视角"
+            data-lightbox-src="./assets/3D_PCB4_2026-04-18.png"
+            data-lightbox-alt="板型二 3D 视角"
+            data-lightbox-title="板型二 3D 视角"
+            data-lightbox-description="板型二呈现另一版三维装配关系。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/3D_PCB4_2026-04-18.png" alt="板型二 3D 视角" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">3D 装配</span>
+              <span class="pcb-card__hint">03 / ALT</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型二 3D 视角</h3>
+              <p>用于比对另一版三维装配关系与器件组织。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module" data-pcb-group="3d">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型二底层 3D 视角"
+            data-lightbox-src="./assets/3D_PCB4底层_2026-04-18.png"
+            data-lightbox-alt="板型二底层 3D 视角"
+            data-lightbox-title="板型二底层 3D 视角"
+            data-lightbox-description="补充另一版板型底层的立体关系。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/3D_PCB4底层_2026-04-18.png" alt="板型二底层 3D 视角" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">3D 装配</span>
+              <span class="pcb-card__hint">04 / LOWER</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型二底层 3D</h3>
+              <p>用于观察底层空间与装配补充关系。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module" data-pcb-group="pcb">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型一布线视图"
+            data-lightbox-src="./assets/PCB_PCB1_2026-04-18.png"
+            data-lightbox-alt="板型一布线视图"
+            data-lightbox-title="板型一布线视图"
+            data-lightbox-description="板型一的走线与器件布局视图。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/PCB_PCB1_2026-04-18.png" alt="板型一布线视图" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">布线视图</span>
+              <span class="pcb-card__hint">05 / TRACE</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型一布线</h3>
+              <p>查看板型一的走线与器件布局组织。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module" data-pcb-group="pcb">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型一底层布线视图"
+            data-lightbox-src="./assets/PCB_PCB1底层_2026-04-18.png"
+            data-lightbox-alt="板型一底层布线视图"
+            data-lightbox-title="板型一底层布线视图"
+            data-lightbox-description="板型一底层的走线与布局视图。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/PCB_PCB1底层_2026-04-18.png" alt="板型一底层布线视图" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">布线视图</span>
+              <span class="pcb-card__hint">06 / LOWER</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型一底层布线</h3>
+              <p>补充底层走线与布局细节。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module" data-pcb-group="pcb">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型二布线视图"
+            data-lightbox-src="./assets/PCB_PCB4_2026-04-18.png"
+            data-lightbox-alt="板型二布线视图"
+            data-lightbox-title="板型二布线视图"
+            data-lightbox-description="板型二的走线与器件布局视图。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/PCB_PCB4_2026-04-18.png" alt="板型二布线视图" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">布线视图</span>
+              <span class="pcb-card__hint">07 / TRACE</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型二布线</h3>
+              <p>比对另一版板型的走线与器件布局。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module" data-pcb-group="pcb">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板型二底层布线视图"
+            data-lightbox-src="./assets/PCB_PCB4底层_2026-04-18.png"
+            data-lightbox-alt="板型二底层布线视图"
+            data-lightbox-title="板型二底层布线视图"
+            data-lightbox-description="板型二底层的走线与布局视图。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/PCB_PCB4底层_2026-04-18.png" alt="板型二底层布线视图" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">布线视图</span>
+              <span class="pcb-card__hint">08 / LOWER</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板型二底层布线</h3>
+              <p>补充底层走线与布局组织方式。</p>
+            </div>
+          </button>
+        </article>
+
+        <article class="pcb-card pcb-card--module pcb-card--outline" data-pcb-group="outline">
+          <button
+            class="pcb-card__button media-trigger"
+            type="button"
+            aria-label="放大查看板级外形轮廓图"
+            data-lightbox-src="./assets/PCB_外框轮廓图_2026-04-18.png"
+            data-lightbox-alt="板级外形轮廓图"
+            data-lightbox-title="板级外形轮廓图"
+            data-lightbox-description="外形轮廓图用于标定 PCB 边界与结构尺寸关系。"
+          >
+            <div class="pcb-card__media">
+              <img src="./assets/PCB_外框轮廓图_2026-04-18.png" alt="板级外形轮廓图" loading="lazy" decoding="async" />
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--top">
+              <span class="pcb-card__badge">外形边界</span>
+              <span class="pcb-card__hint">09 / OUTLINE</span>
+            </div>
+            <div class="pcb-card__hud pcb-card__hud--bottom">
+              <h3>板级外形轮廓</h3>
+              <p>用于标定 PCB 边界与整机结构尺寸关系。</p>
+            </div>
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section class="deployment section-progress" id="deployment" data-theme="light" aria-labelledby="deploymentTitle">
+      <div class="deployment__hero">
+        <div class="section-head section-head--dark reveal reveal--technical">
+          <span class="kicker kicker--dark">工程部署</span>
+          <h2 class="display display--mid" id="deploymentTitle">工程化部署与发布设计</h2>
+          <p>从源码开发到实际产品交付，构建稳定且可配置的软件分发体系</p>
+        </div>
+
+        <div class="deployment__hero-visual reveal reveal--data" data-delay="0.06" data-deployment-artifact="exe">
+          <button
+            class="media-trigger deployment__hero-preview"
+            type="button"
+            aria-label="放大查看 PPGLLMWorkstation.exe 入口视觉图"
+            data-lightbox-src="./assets/exe.png"
+            data-lightbox-alt="PPGLLMWorkstation.exe 入口视觉图"
+            data-lightbox-title="EXE 单入口启动点"
+            data-lightbox-description="exe.png 以发布入口海报的方式强调 PPGLLMWorkstation.exe 是用户解压后最直接的启动锚点。"
+          >
+            <img src="./assets/exe.png" alt="PPGLLMWorkstation.exe 入口视觉图" loading="lazy" decoding="async" />
+          </button>
+        </div>
+      </div>
+
+      <div class="deployment__rail reveal reveal--data" data-delay="0.04" aria-label="部署拓扑概览">
+        <span class="deployment__rail-label">发布拓扑</span>
+        <div class="deployment__rail-track">
+          <span>源码目录</span>
+          <span>打包流程</span>
+          <span>运行包</span>
+        </div>
+      </div>
+
+      <div class="deployment__layout">
+        <article class="deployment__pane deployment__pane--tree reveal reveal--technical" data-delay="0.08">
+          <div class="deployment__pane-head">
+            <span class="deployment__eyebrow">工程目录</span>
+            <h3>工程目录树视图</h3>
+            <p>目录以运行入口、配置、原始数据、报告导出和发布包为主线，保证每类产物独立落位。</p>
+          </div>
+
+          <div class="deployment__tree" aria-label="工程目录树">
+            <div class="deployment__tree-line deployment__tree-line--root" data-deployment-tree="source">
+              <span>ppg_llm_workstation/</span>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="source">
+              <span>├─ run_workstation.py</span>
+              <em>桌面入口</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="source">
+              <span>├─ src/ppg_llm_workstation/</span>
+              <em>核心业务代码</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="config">
+              <span>├─ .env / .env.example</span>
+              <em>配置与模板分离</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="data">
+              <span>├─ data/samples/</span>
+              <em>CSV 原始信号与异常样本</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="reports">
+              <span>├─ reports/20260419_093011_li_chen_report/</span>
+              <em>ppg_report.md 单次问诊独立目录</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="exports">
+              <span>├─ exports/signals/20260419_093011_li_chen/</span>
+              <em>raw / fused / meta / png 会话隔离</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="package">
+              <span>├─ build/ + dist/</span>
+              <em>PyInstaller 中间产物与运行目录</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="release">
+              <span>├─ dist/PPGLLMWorkstation/</span>
+              <em>单入口 EXE 运行目录</em>
+            </div>
+            <div class="deployment__tree-line" data-deployment-tree="release">
+              <span>└─ release/PPGLLMWorkstation.zip</span>
+              <em>最终分发压缩包</em>
+            </div>
+          </div>
+
+          <div class="deployment__config-band">
+            <span class="deployment__chip deployment__chip--config">DEFAULT_CSV_PATH</span>
+            <span class="deployment__chip deployment__chip--config">REPORT_DIRECTORY</span>
+            <span class="deployment__chip deployment__chip--config">SIGNAL_EXPORT_DIRECTORY</span>
+            <span class="deployment__chip deployment__chip--ready">SESSION ISOLATED</span>
+          </div>
+        </article>
+
+        <article class="deployment__pane deployment__pane--pipeline reveal reveal--technical" data-delay="0.12">
+          <div class="deployment__pane-head">
+            <span class="deployment__eyebrow">打包流水线</span>
+            <h3>打包流水线视图</h3>
+            <p>发布逻辑对齐 <code>build_exe.py</code>：清理构建目录、封装运行环境、复制运行资源，并输出 zip 交付包。</p>
+          </div>
+
+          <div class="deployment__stage-list" role="tablist" aria-label="发布阶段切换">
+            <button
+              class="deployment__stage-btn is-active"
+              id="deployment-stage-source"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="deploymentConsole"
+              tabindex="0"
+              data-deployment-stage="source"
+            >
+              <span>01</span>
+              <strong>源码准备</strong>
+            </button>
+            <button
+              class="deployment__stage-btn"
+              id="deployment-stage-package"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="deploymentConsole"
+              tabindex="-1"
+              data-deployment-stage="package"
+            >
+              <span>02</span>
+              <strong>环境封装</strong>
+            </button>
+            <button
+              class="deployment__stage-btn"
+              id="deployment-stage-assets"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="deploymentConsole"
+              tabindex="-1"
+              data-deployment-stage="assets"
+            >
+              <span>03</span>
+              <strong>资源注入</strong>
+            </button>
+            <button
+              class="deployment__stage-btn"
+              id="deployment-stage-release"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="deploymentConsole"
+              tabindex="-1"
+              data-deployment-stage="release"
+            >
+              <span>04</span>
+              <strong>ZIP 分发</strong>
+            </button>
+          </div>
+
+          <div class="deployment__progress" aria-hidden="true">
+            <span class="deployment__progress-fill" id="deploymentProgressFill"></span>
+          </div>
+
+          <div class="deployment__console" id="deploymentConsole" aria-live="polite">
+            <div class="deployment__console-bar">
+              <span class="deployment__console-tag" id="deploymentStageTag">STAGE / SOURCE</span>
+              <span class="deployment__console-status" id="deploymentStageStatus">配置就绪</span>
+            </div>
+            <h4 id="deploymentStageTitle">源码准备：入口、配置与目录约束先对齐</h4>
+            <p id="deploymentStageCopy">
+              <code>run_workstation.py</code> 作为桌面入口，<code>AppConfig</code> 从 <code>.env</code> 解析路径，CSV 回放与串口采集共享统一的数据源接口。
+            </p>
+            <ul id="deploymentStageBullets">
+              <li>入口脚本与 <code>src/ppg_llm_workstation</code> 保持清晰分层。</li>
+              <li><code>.env</code> 负责默认样本、报告目录和导出目录解耦。</li>
+              <li>原始数据、报告和导出结果在运行期天然分流。</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="deployment__pane deployment__pane--bundle reveal reveal--technical" data-delay="0.16">
+          <div class="deployment__pane-head">
+            <span class="deployment__eyebrow">分发包</span>
+            <h3>分发包视图</h3>
+            <p>用户拿到的是一个可直接运行的交付包：EXE 入口、配置模板、说明文档与运行目录一起下发。</p>
+          </div>
+
+          <div class="deployment__bundle">
+            <div class="deployment__bundle-line deployment__bundle-line--root" data-deployment-artifact="zip">
+              <span>release/</span>
+              <strong>PPGLLMWorkstation.zip</strong>
+            </div>
+            <div class="deployment__bundle-line" data-deployment-artifact="exe">
+              <span>├─</span>
+              <strong>PPGLLMWorkstation.exe</strong>
+            </div>
+            <div class="deployment__bundle-line" data-deployment-artifact="config">
+              <span>├─</span>
+              <strong>.env</strong>
+            </div>
+            <div class="deployment__bundle-line" data-deployment-artifact="config">
+              <span>├─</span>
+              <strong>.env.example</strong>
+            </div>
+            <div class="deployment__bundle-line" data-deployment-artifact="readme">
+              <span>├─</span>
+              <strong>README.md</strong>
+            </div>
+            <div class="deployment__bundle-line" data-deployment-artifact="data">
+              <span>└─</span>
+              <strong>data/ + reports/ + exports/</strong>
+            </div>
+          </div>
+
+          <div class="deployment__bundle-note">
+            <span class="deployment__bundle-label">当前交付焦点</span>
+            <p id="deploymentArtifactCopy">
+              最终交付以 zip 为外层分发壳，内部保留 EXE 入口、配置模板和运行所需目录，避免用户再手工拼装环境。
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="team section-progress" id="team" data-theme="light" aria-labelledby="teamTitle">
+      <div class="team__ticker reveal reveal--data" aria-hidden="true">
+        <div class="team__ticker-track">
+          <b>STM32F103C8T6</b>
+          <b>MAX86916</b>
+          <b>MIKROE-4724</b>
+          <b>MULTI-WAVELENGTH PPG</b>
+          <b>AC PPG</b>
+          <b>PCA FUSION</b>
+          <b>BANDPASS FILTER</b>
+          <b>BPM ESTIMATION</b>
+          <b>RR INTERVAL</b>
+          <b>AUTOCORRELATION</b>
+          <b>CSV PLAYBACK</b>
+          <b>SERIAL STREAMING</b>
+          <b>PYTHON</b>
+          <b>TKINTER</b>
+          <b>MATPLOTLIB</b>
+          <b>NUMPY</b>
+          <b>PANDAS</b>
+          <b>SCIPY</b>
+          <b>SCIKIT-LEARN</b>
+          <b>PYSERIAL</b>
+          <b>OPENAI-COMPATIBLE API</b>
+          <b>DEEPSEEK-V3.2</b>
+          <b>MOCK LLM</b>
+          <b>MARKDOWN REPORT</b>
+          <b>PYINSTALLER</b>
+          <b>SOLIDWORKS</b>
+          <b>PCB LAYOUT</b>
+          <b>SCHEMATIC DESIGN</b>
+          <b>STM32F103C8T6</b>
+          <b>MAX86916</b>
+          <b>MIKROE-4724</b>
+          <b>MULTI-WAVELENGTH PPG</b>
+          <b>AC PPG</b>
+          <b>PCA FUSION</b>
+          <b>BANDPASS FILTER</b>
+          <b>BPM ESTIMATION</b>
+          <b>RR INTERVAL</b>
+          <b>AUTOCORRELATION</b>
+          <b>CSV PLAYBACK</b>
+          <b>SERIAL STREAMING</b>
+          <b>PYTHON</b>
+          <b>TKINTER</b>
+          <b>MATPLOTLIB</b>
+          <b>NUMPY</b>
+          <b>PANDAS</b>
+          <b>SCIPY</b>
+          <b>SCIKIT-LEARN</b>
+          <b>PYSERIAL</b>
+          <b>OPENAI-COMPATIBLE API</b>
+          <b>DEEPSEEK-V3.2</b>
+          <b>MOCK LLM</b>
+          <b>MARKDOWN REPORT</b>
+          <b>PYINSTALLER</b>
+          <b>SOLIDWORKS</b>
+          <b>PCB LAYOUT</b>
+          <b>SCHEMATIC DESIGN</b>
+        </div>
+      </div>
+
+      <div class="team__hero reveal reveal--technical">
+        <span class="kicker kicker--dark">团队分工</span>
+        <h2 class="display display--mid" id="teamTitle">团队分工覆盖全面</h2>
+        <p>不同成员分别支撑系统的总体方案、板级设计、结构建模、算法评测、提示词设计与工程化发布。</p>
+      </div>
+
+      <div class="team__roster reveal reveal--story" data-delay="0.04">
+        <article class="team-member" style="--member-from: rgba(239, 199, 168, 0.92); --member-to: rgba(67, 137, 108, 0.92);">
+          <div class="team-member__mark" aria-hidden="true"></div>
+          <div class="team-member__body">
+            <span>总设计</span>
+            <strong>张伟麟</strong>
+            <p>总体方案、硬件原型、核心算法、大语言模型接入、工作站界面与软件集成、汇报页&PPT设计与制作。</p>
+          </div>
+        </article>
+
+        <article class="team-member" style="--member-from: rgba(239, 213, 173, 0.9); --member-to: rgba(94, 145, 110, 0.92);">
+          <div class="team-member__mark" aria-hidden="true"></div>
+          <div class="team-member__body">
+            <span>原理图设计&PCB设计</span>
+            <strong>黄佳滢</strong>
+            <p>原理图整理、接口规划、电源组织与板级实现方向。</p>
+          </div>
+        </article>
+
+        <article class="team-member" style="--member-from: rgba(239, 201, 168, 0.88); --member-to: rgba(92, 136, 118, 0.92);">
+          <div class="team-member__mark" aria-hidden="true"></div>
+          <div class="team-member__body">
+            <span>建模设计</span>
+            <strong>冯湘云</strong>
+            <p>腕表式可穿戴外形、壳体与传感器布局方案。</p>
+          </div>
+        </article>
+
+        <article class="team-member" style="--member-from: rgba(238, 204, 178, 0.88); --member-to: rgba(83, 138, 110, 0.92);">
+          <div class="team-member__mark" aria-hidden="true"></div>
+          <div class="team-member__body">
+            <span>样本设计</span>
+            <strong>陈世佳</strong>
+            <p>异常样本构建、节律场景测试与指标评估设计。</p>
+          </div>
+        </article>
+
+        <article class="team-member" style="--member-from: rgba(234, 196, 162, 0.9); --member-to: rgba(89, 145, 118, 0.92);">
+          <div class="team-member__mark" aria-hidden="true"></div>
+          <div class="team-member__body">
+            <span>医学提示词设计</span>
+            <strong>王志栋</strong>
+            <p>问诊字段整理、风险表达、追问模板与保守型提示词策略。</p>
+          </div>
+        </article>
+
+        <article class="team-member" style="--member-from: rgba(240, 206, 170, 0.9); --member-to: rgba(78, 132, 111, 0.92);">
+          <div class="team-member__mark" aria-hidden="true"></div>
+          <div class="team-member__body">
+            <span>工程部署与发布</span>
+            <strong>吴朋峰</strong>
+            <p>EXE 打包发布、目录组织、导出规范与交付流程设计。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="manifesto section-progress" id="conclusion" data-theme="light" aria-labelledby="conclusionTitle">
+      <div class="manifesto__inner reveal reveal--hero">
+        <h2 class="manifesto__headline" id="conclusionTitle">
+          <span class="manifesto__headline-line">PPG采集&心率解算与</span>
+          <span class="manifesto__headline-line">大模型问诊的集成</span>
+        </h2>
+        <div class="manifesto__credit">PPG LLM 项目组 / 深圳技术大学 / 张伟麟小组</div>
+
+      </div>
+
+      <div class="manifesto__pipeline">
+        <span class="manifesto__pipe-node">MAX86916<small>四通道采集</small></span>
+        <span class="manifesto__pipe-arrow" aria-hidden="true"></span>
+        <span class="manifesto__pipe-node">STM32<small>高通+滑动平均</small></span>
+        <span class="manifesto__pipe-arrow" aria-hidden="true"></span>
+        <span class="manifesto__pipe-node">串口上送<small>UART → PC</small></span>
+        <span class="manifesto__pipe-arrow" aria-hidden="true"></span>
+        <span class="manifesto__pipe-node">PC工作站<small>PCA + 带通滤波</small></span>
+        <span class="manifesto__pipe-arrow" aria-hidden="true"></span>
+        <span class="manifesto__pipe-node">心率估计<small>频域+自相关</small></span>
+        <span class="manifesto__pipe-arrow" aria-hidden="true"></span>
+        <span class="manifesto__pipe-node">特征提取<small>BPM / RR / 置信度</small></span>
+        <span class="manifesto__pipe-arrow" aria-hidden="true"></span>
+        <span class="manifesto__pipe-node">LLM问诊<small>提示词驱动</small></span>
+        <span class="manifesto__pipe-arrow" aria-hidden="true"></span>
+        <span class="manifesto__pipe-node">报告导出<small>CSV / MD</small></span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" data-theme="light">
+    <div class="footer__inner">
+      <p>课程设计内容覆盖工作站系统、算法设计、样本设计、提示词设计、硬件设计、可穿戴建模设计、原理图设计、PCB设计与最终的工程部署</p>
+      <nav aria-label="页脚导航">
+        <a href="#hero">开篇页</a>
+        <a href="#system">工作站系统</a>
+        <a href="#algorithm">算法设计</a>
+        <a href="#samples">样本设计</a>
+        <a href="#prompts">提示词设计</a>
+        <a href="#hardware">硬件底座</a>
+        <a href="#wearable">可穿戴方向</a>
+        <a href="#schematics">原理图设计</a>
+        <a href="#pcb">PCB 设计</a>
+        <a href="#deployment">工程部署</a>
+        <a href="#team">团队分工</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" id="lightboxDialog" aria-label="素材放大预览">
+    <button class="lightbox__close" id="lightboxClose" type="button" aria-label="关闭预览">×</button>
+    <figure class="lightbox__figure">
+      <img id="lightboxImage" src="" alt="" />
+      <figcaption>
+        <strong id="lightboxTitle"></strong>
+        <p id="lightboxDescription"></p>
+      </figcaption>
+    </figure>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
